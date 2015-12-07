@@ -4,10 +4,13 @@ var express = require('express');
 var app = express();
 var controllers = require('./controllers');
 
+// routers hello alsjdflkjasdkl
 app
   .route('/users')
   .get(controllers.users.list)
   .post(controllers.users.create);
+
+// hello
 
 app
   .route('/users/:id')
