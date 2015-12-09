@@ -1,5 +1,7 @@
 'use strict';
 
+let Users = require('../models/index.js').users;
+
 module.exports = {
   list: list,
   create: create,
@@ -8,31 +10,52 @@ module.exports = {
   delete: del
 };
 
-function list(req, res) {
-  var users = [
-    {name: 'Darlan'},
-    {name: 'Clara'}
-  ];
-
-  res.json(users);
+function filterByPermission(array) {
+  // process
+  return processData;
 }
 
-function create(req, res) {
-  res
-    .status(201)
-    .json({
-      message: 'created'
+function list(req, res) {
+  Users
+    .find({}, '-__v')
+    .then(function(users) {
+      res.json(users);
     });
 }
 
+function create(req, res) {
+  let user = new Users(req.body);
+
+  let success = function(status) {
+    console.log(status);
+     res
+      .status(201)
+      .json({
+        message: 'created'
+      });
+  };
+
+  let error = function(err) {
+    console.log(err);
+    res.status(400).json({
+      message: 'algo errado'
+    });
+  };
+
+  user
+    .save()
+    .then(success, error);
+}
+
 function get(req, res) {
-  // console.log(req.params);
-  var user = {name: 'Darlan'};
-  res.json(user);
+  Users
+    .findById(req.params.id)
+    .then(function(user) {
+      res.json(user);
+    });
 }
 
 function update(req, res) {
-  // console.log(req.body);
   res.json({
     message: 'updated'
   });
